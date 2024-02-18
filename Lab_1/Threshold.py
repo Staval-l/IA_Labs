@@ -22,35 +22,49 @@ ax.hist(img.ravel(), bins=256, range=[0, 256])
 ax.set_xlim(0, 256)
 plt.show()
 
-p2, p98 = np.percentile(img, (2, 98))
-img_rescale = exposure.rescale_intensity(img, in_range=(p2, p98))
-image_show(img_rescale)
+# p2, p98 = np.percentile(img, (2, 98))
+# img_rescale = exposure.rescale_intensity(img, in_range=(p2, p98))
+# image_show(img_rescale)
+# fig, ax = plt.subplots(1, 1)
+# ax.hist(img_rescale.ravel(), bins=256, range=[0, 256])
+# ax.set_xlim(0, 256)
+# plt.show()
+#
+# selem = disk(100)
+# img_eq = rank.equalize(img, footprint=selem)
+# image_show(img_eq)
+# fig, ax = plt.subplots(1, 1)
+# ax.hist(img_eq.ravel(), bins=256, range=[0, 256])
+# ax.set_xlim(0, 256)
+# plt.show()
+#
+#
+# img_eq = exposure.equalize_hist(img)
+# image_show(img_eq)
+# fig, ax = plt.subplots(1, 1)
+# ax.hist(img_eq.ravel(), bins=256, range=[0, 1])
+# ax.set_xlim(0, 1)
+# plt.show()
+#
+#
+# text_segmented = img > 120
+# # text_segmented = filters.threshold_local(img, block_size=21, offset=10)
+# image_show(text_segmented)
+# fig, ax = plt.subplots(1, 1)
+# ax.hist(text_segmented.ravel(), bins=256, range=[0, 1])
+# ax.set_xlim(0, 1)
+# plt.show()
+
+image = imread(text)
+for i in range(512):
+    for j in range(512):
+        if image[i][j] > 100:
+            image[i][j] = 255
+        else:
+            image[i][j] = 0
+
+image_show(image)
 fig, ax = plt.subplots(1, 1)
-ax.hist(img_rescale.ravel(), bins=256, range=[0, 256])
+ax.hist(image.ravel(), bins=256, range=[0, 256])
 ax.set_xlim(0, 256)
-plt.show()
-
-selem = disk(100)
-img_eq = rank.equalize(img, footprint=selem)
-image_show(img_eq)
-fig, ax = plt.subplots(1, 1)
-ax.hist(img_eq.ravel(), bins=256, range=[0, 256])
-ax.set_xlim(0, 256)
-plt.show()
-
-
-img_eq = exposure.equalize_hist(img)
-image_show(img_eq)
-fig, ax = plt.subplots(1, 1)
-ax.hist(img_eq.ravel(), bins=256, range=[0, 256])
-ax.set_xlim(0, 256)
-plt.show()
-
-
-text_segmented = img > 100
-# text_segmented = filters.threshold_local(img, block_size=21, offset=10)
-image_show(text_segmented);
-fig, ax = plt.subplots(1, 1)
-ax.hist(text_segmented.ravel(), bins=256, range=[0, 1])
-ax.set_xlim(0, 1)
 plt.show()
