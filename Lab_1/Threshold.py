@@ -55,16 +55,47 @@ plt.show()
 # ax.set_xlim(0, 1)
 # plt.show()
 
+
 image = imread(text)
+a = 235 / 255
+b = (255 * 10 - 245 * 10) / 255
 for i in range(512):
     for j in range(512):
-        if image[i][j] > 100:
-            image[i][j] = 255
-        else:
-            image[i][j] = 0
+        image[i][j] = image[i][j] * a + b
 
 image_show(image)
 fig, ax = plt.subplots(1, 1)
 ax.hist(image.ravel(), bins=256, range=[0, 256])
 ax.set_xlim(0, 256)
 plt.show()
+
+
+# Усреднение по гистограмме, типа
+
+# image = imread(text)
+# for i in range(512):
+#     for j in range(512):
+#         image[i][j] = image[i][j] * 245 + 10
+#
+# image_show(image)
+# fig, ax = plt.subplots(1, 1)
+# ax.hist(image.ravel(), bins=256, range=[0, 256])
+# ax.set_xlim(0, 256)
+# plt.show()
+
+
+# Пороговая обработка
+
+# image = imread(text)
+# for i in range(512):
+#     for j in range(512):
+#         if image[i][j] > 100:
+#             image[i][j] = 255
+#         else:
+#             image[i][j] = 0
+#
+# image_show(image)
+# fig, ax = plt.subplots(1, 1)
+# ax.hist(image.ravel(), bins=256, range=[0, 256])
+# ax.set_xlim(0, 256)
+# plt.show()
