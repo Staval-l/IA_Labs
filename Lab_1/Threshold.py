@@ -1,101 +1,67 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from skimage.io import imread, imsave
-from skimage import exposure
-from skimage.morphology import disk
-from skimage.filters import rank
+from skimage.io import imread
 
 
-def image_show(image, nrows=1, ncols=1, cmap='gray'):
-    fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(14, 14))
+def image_show(image, nrows=1, ncols=1):
+    fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(10, 10))
     ax.imshow(image, cmap='gray')
     ax.axis('off')
     return fig, ax
 
 
-text = "Images/01_apc.tif"
+# Дефолт
+text = "Images/09_lena2.tif"
 img = imread(text)
 image_show(img)
 
+hist, bins = np.histogram(img.flatten(), 256, [0, 256])
+cdf_o = hist.cumsum()
+cdf_normalized = cdf_o * float(hist.max()) / cdf_o.max()
+
 fig, ax = plt.subplots(1, 1)
 ax.hist(img.ravel(), bins=256, range=[0, 256])
+ax.plot(cdf_normalized, color='red')
 ax.set_xlim(0, 256)
 plt.show()
 
-# p2, p98 = np.percentile(img, (2, 98))
-# img_rescale = exposure.rescale_intensity(img, in_range=(p2, p98))
-# image_show(img_rescale)
-# fig, ax = plt.subplots(1, 1)
-# ax.hist(img_rescale.ravel(), bins=256, range=[0, 256])
-# ax.set_xlim(0, 256)
-# plt.show()
-#
-# selem = disk(100)
-# img_eq = rank.equalize(img, footprint=selem)
-# image_show(img_eq)
-# fig, ax = plt.subplots(1, 1)
-# ax.hist(img_eq.ravel(), bins=256, range=[0, 256])
-# ax.set_xlim(0, 256)
-# plt.show()
-#
-#
-# img_eq = exposure.equalize_hist(img)
-# image_show(img_eq)
-# fig, ax = plt.subplots(1, 1)
-# ax.hist(img_eq.ravel(), bins=256, range=[0, 1])
-# ax.set_xlim(0, 1)
-# plt.show()
-#
-#
-# text_segmented = img > 120
-# # text_segmented = filters.threshold_local(img, block_size=21, offset=10)
-# image_show(text_segmented)
-# fig, ax = plt.subplots(1, 1)
-# ax.hist(text_segmented.ravel(), bins=256, range=[0, 1])
-# ax.set_xlim(0, 1)
-# plt.show()
-
-
+# Линейное контрастирование
 image = imread(text)
-a = 235 / 255
-b = (255 * 10 - 245 * 10) / 255
-for i in range(512):
-    for j in range(512):
-        image[i][j] = image[i][j] * a + b
-
+min_val = np.min(image)
+max_val = np.max(image)
+a = 255 / (max_val - min_val)
+b = -1 * (255 * min_val) / (max_val - min_val)
+image = a * image + b
 image_show(image)
+
 fig, ax = plt.subplots(1, 1)
 ax.hist(image.ravel(), bins=256, range=[0, 256])
 ax.set_xlim(0, 256)
 plt.show()
 
+# Эквализация гистограммы
+img_eq = imread(text)
+hist, bins = np.histogram(img_eq.flatten(), 256, [0, 256])
 
-# Усреднение по гистограмме, типа
+cdf = hist.cumsum()
+cdf_normalized = cdf * float(hist.max()) / cdf.max()
 
-# image = imread(text)
-# for i in range(512):
-#     for j in range(512):
-#         image[i][j] = image[i][j] * 245 + 10
-#
-# image_show(image)
-# fig, ax = plt.subplots(1, 1)
-# ax.hist(image.ravel(), bins=256, range=[0, 256])
-# ax.set_xlim(0, 256)
-# plt.show()
+cdf_m = np.ma.masked_equal(cdf, 0)
+cdf_m = (cdf_m - cdf_m.min())*255/(cdf_m.max()-cdf_m.min())
+cdf = np.ma.filled(cdf_m, 0).astype('uint8')
+img_eq = cdf[img_eq]
+image_show(img_eq)
 
+fig, ax = plt.subplots(1, 1)
+ax.plot(cdf_normalized, color='red')
+ax.hist(img_eq.ravel(), bins=256, range=[0, 256])
+ax.set_xlim(0, 256)
+plt.show()
 
 # Пороговая обработка
-
-# image = imread(text)
-# for i in range(512):
-#     for j in range(512):
-#         if image[i][j] > 100:
-#             image[i][j] = 255
-#         else:
-#             image[i][j] = 0
-#
-# image_show(image)
-# fig, ax = plt.subplots(1, 1)
-# ax.hist(image.ravel(), bins=256, range=[0, 256])
-# ax.set_xlim(0, 256)
-# plt.show()
+img_t = (img > 100).astype('uint8')
+image_show(img_t)
+fig, ax = plt.subplots(1, 1)
+ax.hist(img_t.ravel(), bins=256, range=[0, 1])
+ax.set_xlim(0, 1)
+plt.show()
