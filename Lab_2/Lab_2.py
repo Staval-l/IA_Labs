@@ -119,7 +119,7 @@ window = np.array([[2 / 3, -1 / 3, 2 / 3],
                    [-1 / 3, -4 / 3, -1 / 3],
                    [2 / 3, -1 / 3, 2 / 3]])
 
-laplasian = np.abs(convolve2d(img, window, mode='same', boundary='symm'))
+laplasian = np.abs(convolve2d(img, window, mode='same', boundary='symm'))  # Модуль для того, чтобы стало светлее, как я понял
 
 ax[0, 1].imshow(laplasian, cmap='gray', vmin=0, vmax=255)
 ax[0, 1].set_title("Лапласиан")

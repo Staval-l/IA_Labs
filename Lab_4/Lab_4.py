@@ -16,10 +16,10 @@ def generate_noise(size, variance=0.01):
 
     image = np.full((size, size), 128)
     noise = (np.random.normal(0, 30, (size, size))).astype(np.int16)
-    print(noise)
+    # print(noise)
     # noise[noise < 0] = 0
     image += noise
-    print(image)
+    # print(image)
 
     # return noise * 255
     return image
@@ -79,23 +79,6 @@ def correlation_method(image, mask):
     return R
 
 
-def test():
-    image = np.array([[0, 0, 0, 0], [2, 2, 2, 1], [0, 2, 0, 1], [0, 2, 0, 1]])
-
-    size = image.shape
-    print("image")
-    print(image)
-    print(image.shape)
-
-    object_mask = np.array([[1, 1, 1], [0, 1, 0], [0, 1, 0]])
-
-    R = correlation_method(object_mask, object_mask)
-    print("Corr")
-    print(R)
-    plt.imshow(R*255, cmap='gray', vmin=0, vmax=255)
-    plt.show()
-
-
 def main():
     object_mask = np.array([[1, 1, 1], [0, 1, 0], [0, 1, 0]])
     object_rotated_mask = np.array([[1, 0, 0], [1, 1, 1], [1, 0, 0]])
@@ -117,9 +100,9 @@ def main():
     founded_object_same = threshold_processing(B_same_object, threshold)
     founded_object_different = threshold_processing(B_different_object, threshold)
 
-    print(np.sort(np.ravel(B_without_object))[-1*count - 3:])
-    print(np.sort(np.ravel(B_same_object))[-1*count - 3:])
-    print(np.sort(np.ravel(B_different_object))[-1*count*2 - 3:])
+    # print(np.sort(np.ravel(B_without_object))[-1*count - 3:])
+    # print(np.sort(np.ravel(B_same_object))[-1*count - 3:])
+    # print(np.sort(np.ravel(B_different_object))[-1*count*2 - 3:])
 
     plt.figure(figsize=(16, 9))
     plt.suptitle("Фон без объектов", fontsize=19, fontweight='bold')
@@ -145,7 +128,7 @@ def main():
     plt.imshow(noise.astype(np.uint8), cmap='gray', vmin=0, vmax=255)
 
     plt.subplot(2, 2, 2)
-    plt.title('Изображение c объктами')
+    plt.title('Изображение c объектами')
     plt.imshow(image_with_same_object, cmap='gray', vmin=0, vmax=255)
 
     plt.subplot(2, 2, 3)
@@ -165,7 +148,7 @@ def main():
     plt.imshow(noise.astype(np.uint8), cmap='gray', vmin=0, vmax=255)
 
     plt.subplot(2, 2, 2)
-    plt.title('Изображение c объктами')
+    plt.title('Изображение c объектами')
     plt.imshow(image_with_different_object, cmap='gray', vmin=0, vmax=255)
 
     plt.subplot(2, 2, 3)
@@ -180,5 +163,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    # test()
-    # generate_noise(20, 1)
