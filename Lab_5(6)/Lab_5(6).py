@@ -6,7 +6,9 @@ import skimage.io
 
 def entropy(arr):
     _, counts = np.unique(arr, return_counts=True)
+    # print(counts)
     counts = counts / counts.sum()
+    # print(counts)
     return -(counts * np.log2(counts)).sum()
 
 
@@ -48,6 +50,7 @@ def MyDifDeCode(q, e, r):
 
     return y
 
+
 def contrasting(array):
     min = np.min(array)
     max = np.max(array)
@@ -57,17 +60,19 @@ def contrasting(array):
     return g
 
 
-if __name__ == "__main__":
-
-    img = cv.imread("C:\\Users\\Staval\\PycharmProjects\\IA_Labs\\Lab_1\\Images\\01_apc.tif", cv.IMREAD_GRAYSCALE)
+def main():
+    # Task 1
     x = range(0, 51, 5)
     y1 = [entropy(MyDifCode(img, e, 1)[0]) for e in x]
     y2 = [entropy(MyDifCode(img, e, 2)[0]) for e in x]
+    plt.xlabel('Погрешность')
+    plt.ylabel('Энтропия')
     plt.plot(x, y1, color="green", label="предсказатель 1")
     plt.plot(x, y2, color="red", label="предсказатель 2")
     plt.legend()
     plt.show()
 
+    # Task 2
     e = 5, 10, 20, 40
     fig, axes = plt.subplots(2, 2, figsize=(15, 15))
     axes = axes.flatten()
@@ -79,6 +84,7 @@ if __name__ == "__main__":
         axes[i].set_title(f"Восстановление e={e[i]}")
     plt.show()
 
+    # Task 3
     e = 0, 0, 5, 10
     fig, axes = plt.subplots(2, 2, figsize=(12, 12))
     axes = axes.flatten()
@@ -99,3 +105,8 @@ if __name__ == "__main__":
         axes[i].imshow(s, cmap="gray")
         axes[i].set_title(f"Разностный сигнал ({desc}) при e={e[i]}")
     plt.show()
+
+
+if __name__ == "__main__":
+    img = cv.imread("C:\\Users\\Staval\\PycharmProjects\\IA_Labs\\Lab_1\\Images\\01_apc.tif", cv.IMREAD_GRAYSCALE)
+    main()
