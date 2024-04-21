@@ -95,7 +95,7 @@ def main():
     B_same_object = correlation_method(image_with_same_object, object_mask)
     B_different_object = correlation_method(image_with_different_object, object_mask)
 
-    threshold = 0.42
+    threshold = 0.4
     founded_without_object = threshold_processing(B_without_object, threshold)
     founded_object_same = threshold_processing(B_same_object, threshold)
     founded_object_different = threshold_processing(B_different_object, threshold)
